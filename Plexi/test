@@ -1,0 +1,4 @@
+#!/bin/bash
+number=$RANDOM
+mono bin/Debug/Plexi.exe $2 < $1 > test_$number.png
+open test_$number.png
