@@ -76,6 +76,23 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\Edge objects.jpg" />
+    <Content Include="Images\Group A.jpg" />
+    <Content Include="Images\Group B.jpg" />
+    <Content Include="Images\Group C.jpg" />
+    <Content Include="Images\Group D.jpg" />
+    <Content Include="Images\Group E.jpg" />
+    <Content Include="Images\No overlap1.jpg" />
+    <Content Include="Images\No overlap2.jpg" />
+    <Content Include="Images\No overlap3.jpg" />
+    <Content Include="Images\One of each1.jpg" />
+    <Content Include="Images\One of each2.jpg" />
+    <Content Include="Images\Overlap1.jpg" />
+    <Content Include="Images\Overlap2.jpg" />
+    <Content Include="Images\Overlap3.jpg" />
+    <Content Include="Images\Perspective shift.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
