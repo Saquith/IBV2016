@@ -51,7 +51,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plexi.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -92,6 +91,12 @@
     <Content Include="Images\Overlap2.jpg" />
     <Content Include="Images\Overlap3.jpg" />
     <Content Include="Images\Perspective shift.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Plexi\Plexi.csproj">
+      <Project>{da09c43d-2aee-4776-97c6-66513b2d9b59}</Project>
+      <Name>Plexi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
