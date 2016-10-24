@@ -49,6 +49,39 @@ namespace Plexi
         }
     }
 
+    public class RotateRight : Processor
+    {
+        public override Color[,] Process(Color[,] image)
+        {
+            int w = image.GetLength(0), h = image.GetLength(1);
+            var newImage = new Color[h, w];
+            for (var x = 0; x < w; x++)
+                for (var y = 0; y < h; y++)
+                    newImage[y, x] = image[x, h - y - 1];
+            return newImage;
+        }
+    }
+
+    public class Grayscale : Processor
+    {
+        public override Color Transform(Color c)
+        {
+            int grayVal = (int)((c.R * 0.21) + (c.G * 0.72) + (c.B * 0.07)); // The numbers represent a weight for better grayscale values (HDTV Luma coding)
+            return Color.FromArgb(grayVal, grayVal, grayVal);
+        }
+    }
+
+    public class Threshold : Processor
+    {
+        public override Color Transform(Color c)
+        {
+            int t = 128;    // Threshold value
+
+            if (c.R > t) { return Color.White; }
+            else return Color.Black;
+        }
+    }
+
     public static class Program
     {
         //Available Processor instances.
@@ -61,7 +94,7 @@ namespace Plexi
             new Rotate()
         };
 
-        private static Processor processorFromName(string name)
+        private static Processor ProcessorFromName(string name)
         {
             try
             {
@@ -80,7 +113,7 @@ namespace Plexi
             Processor processor = null;
             if (args.Length >= 1)
             {
-                var ps = args[0].Split(new char[] { '+', ',' }, System.StringSplitOptions.RemoveEmptyEntries).Select(arg => processorFromName(arg)).Where(o => o != null).ToArray();
+                var ps = args[0].Split(new char[] { '+', ',' }, System.StringSplitOptions.RemoveEmptyEntries).Select(arg => ProcessorFromName(arg)).Where(o => o != null).ToArray();
                 if (ps.Length > 0)
                     processor = new MultiProcessor(ps);
             }
