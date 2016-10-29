@@ -16,7 +16,7 @@ namespace Plexi
             new Rotate(),
             new RotateRight(), 
             new Grayscale(), 
-            new Threshold(), 
+            new Threshold(128), 
         };
 
         private static Processor ProcessorFromName(string name)

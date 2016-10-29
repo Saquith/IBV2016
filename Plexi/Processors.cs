@@ -76,38 +76,75 @@ namespace Plexi
 
     public class Threshold : Processor
     {
+        int t;  // Threshold value
+        public Threshold(int tVal)
+        {
+            t = tVal;
+        }
         public override Color Transform(Color c)
         {
-            int t = 128;    // Threshold value
+            
 
             if (c.R > t) { return Color.White; }
             else return Color.Black;
         }
     }
 
-    public class Average : Processor
+    public class Filter : Processor
     {
+        private Kernel kernel;
+
+        public Filter(string k)
+        {
+            switch (k) {
+                case "Average3X3":
+                    kernel = new Average3X3();
+                    break;
+                case "Average5X5":
+                    kernel = new Average5X5();
+                    break;
+                case "Gaussian3X3":
+                    kernel = new Gaussian3X3();
+                    break;
+                case "Gaussian5X5":
+                    kernel = new Gaussian5X5();
+                    break;
+                default :
+                    kernel = new Average3X3();
+                    break;
+            }
+        }
         public override Color[,] Process(Color[,] image)
         {
-            Kernel kernel = new Average3X3();
+            
             Color[,] newImage = new Color[image.GetLength(0),image.GetLength(1)];
 
-            double gray = 0;
+            int grayValue = 0;
+            double pixelSum = 0;
+            int offsetX = kernel.Center.Item1;
+            int offsetY = kernel.Center.Item2;
 
-            for (int offsetY = kernel.Center.Item2; offsetY < image.GetLength(1); offsetY++)
+            for (int imageY = offsetY; imageY < (image.GetLength(1) - offsetY); imageY++)
             {
-                for (int offsetX = kernel.Center.Item1; offsetX < image.GetLength(0); offsetX++)
+                for (int imageX = offsetX; imageX < (image.GetLength(0) - offsetX); imageX++)
                 {
+                    // reset values after each iteration
+                    grayValue = 0;
+                    pixelSum = 0;
 
-                    gray = 0;
 
-                    for (int y = -kernel.Center.Item2; y <= kernel.Center.Item2; y++)
+                    // for loop goes through the kernel
+                    for (int y = -offsetY; y <= offsetY; y++)
                     {
-                        for (int x = -kernel.Center.Item1; x <= kernel.Center.Item1; x++)
+                        for (int x = -offsetY; x <= offsetX; x++)
                         {
-
+                            // The sum of the pixelvalues multiplied by the kernel values
+                            pixelSum += (image[(imageX + x), (imageY + y)].R) * (kernel.Matrix[x + offsetX, y + offsetY]);
                         }
                     }
+
+                    grayValue = (int) pixelSum/kernel.Divisor;
+                    newImage[imageX, imageY] = Color.FromArgb(grayValue, grayValue, grayValue);
                 }
             }
 
