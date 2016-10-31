@@ -94,25 +94,9 @@ namespace Plexi
     {
         private Kernel kernel;
 
-        public Filter(string k)
+        public Filter(Kernel k)
         {
-            switch (k) {
-                case "Average3X3":
-                    kernel = new Average3X3();
-                    break;
-                case "Average5X5":
-                    kernel = new Average5X5();
-                    break;
-                case "Gaussian3X3":
-                    kernel = new Gaussian3X3();
-                    break;
-                case "Gaussian5X5":
-                    kernel = new Gaussian5X5();
-                    break;
-                default :
-                    kernel = new Average3X3();
-                    break;
-            }
+            kernel = k;
         }
         public override Color[,] Process(Color[,] image)
         {
@@ -121,8 +105,8 @@ namespace Plexi
 
             int grayValue = 0;
             double pixelSum = 0;
-            int offsetX = kernel.Center.Item1;
-            int offsetY = kernel.Center.Item2;
+            int offsetX = kernel.Center().Item1;
+            int offsetY = kernel.Center().Item2;
 
             for (int imageY = offsetY; imageY < (image.GetLength(1) - offsetY); imageY++)
             {
@@ -143,7 +127,7 @@ namespace Plexi
                         }
                     }
 
-                    grayValue = (int) pixelSum/kernel.Divisor;
+                    grayValue = Math.Min(Math.Max((int)pixelSum/(int)kernel.Divisor(),0),255); // min and max makes sure the value stays within the 0-255 range
                     newImage[imageX, imageY] = Color.FromArgb(grayValue, grayValue, grayValue);
                 }
             }

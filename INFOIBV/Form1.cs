@@ -42,8 +42,9 @@ namespace INFOIBV
             Processor processor = new MultiProcessor(new Processor[]
             {
                 new Grayscale(), 
-                new Filter("Gaussian3X3"), 
-                new Threshold(80)
+                new Filter(new Gaussian3X3()),
+                new Filter(new HighPass3X3()), 
+                //new Threshold(80)
                 //new Negative(),
                 //new RotateRight()
             });

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Plexi
 {
-    class Kernel
+    public class Kernel
     {
         /* the matrix holds the structuring element, 
            the divisor is the sum of all the values 
@@ -16,18 +16,21 @@ namespace Plexi
            to calculate the offset.*/
 
         public double[,] Matrix;
-        public int Divisor;
-        public Tuple<int,int> Center;
 
-        protected Tuple<int, int> CalcCenter(double[,] matrix)
+        public Tuple<int, int> Center()
         {
-            var x = (int)((double)matrix.GetLength(0) - 1) / 2;
-            var y = (int)((double)matrix.GetLength(1) - 1) / 2;
+            var x = (int)((double)Matrix.GetLength(0) - 1) / 2;
+            var y = (int)((double)Matrix.GetLength(1) - 1) / 2;
             return new Tuple<int, int>(x, y);
+        }
+
+        public double Divisor()
+        {
+            return Math.Max(Matrix.Cast<double>().Sum(), 1); // the total sum of the matrix is used to preserve luminance
         }
     }
 
-    class Average3X3 : Kernel
+    public class Average3X3 : Kernel
     {
         public Average3X3()
         {
@@ -39,13 +42,10 @@ namespace Plexi
                 { 1, 1, 1 },
                 { 1, 1, 1 },
             };
-
-            Divisor = 9; // sum of all values in the matrix
-            Center = CalcCenter(Matrix);
         }
     }
 
-    class Average5X5 : Kernel
+    public class Average5X5 : Kernel
     {
         public Average5X5()
         {
@@ -57,13 +57,10 @@ namespace Plexi
                 { 1, 1, 1, 1, 1 },
                 { 1, 1, 1, 1, 1 },
             };
-
-            Divisor = 25;
-            Center = CalcCenter(Matrix);
         }
     }
 
-    class Gaussian3X3 : Kernel
+    public class Gaussian3X3 : Kernel
     {
         public Gaussian3X3()
         {
@@ -73,13 +70,10 @@ namespace Plexi
                 { 2, 4, 2 },
                 { 1, 2, 1 },
             };
-
-            Divisor = 16;
-            Center = CalcCenter(Matrix);
         }
     }
 
-    class Gaussian5X5 : Kernel
+    public class Gaussian5X5 : Kernel
     {
         public Gaussian5X5()
         {
@@ -91,9 +85,58 @@ namespace Plexi
                 {  7, 31,  52, 31,  7 },
                 {  2,  7,  12,  7,  2 },
             };
+        }
+    }
 
-            Divisor = 571;
-            Center = CalcCenter(Matrix);
+    public class Smooth3X3 : Kernel
+    {
+        public Smooth3X3()
+        {
+            Matrix = new double[,]
+            {
+                { 1, 1, 1 },
+                { 1, 0, 1 },
+                { 1, 1, 1 },
+            };
+        }
+    }
+
+    public class LowSmooth3X3 : Kernel
+    {
+        public LowSmooth3X3()
+        {
+            Matrix = new double[,]
+            {
+                { 1, 0, 1 },
+                { 0, 0, 0 },
+                { 1, 0, 1 },
+            };
+        }
+    }
+
+    public class Sharp3X3 : Kernel
+    {
+        public Sharp3X3()
+        {
+            Matrix = new double[,]
+            {
+                { -1, -1, -1 },
+                { -1,  9, -1 },
+                { -1, -1, -1 },
+            };
+        }
+    }
+
+    public class HighPass3X3 : Kernel
+    {
+        public HighPass3X3()
+        {
+            Matrix = new double[,]
+            {
+                { -1, -1, -1 },
+                { -1,  8, -1 },
+                { -1, -1, -1 },
+            };
         }
     }
 }
