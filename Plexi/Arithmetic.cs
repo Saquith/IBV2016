@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Plexi
 {
-	public enum Function
+	public enum Arithmetic
 	{
 		Sum,
 		Difference,
@@ -15,25 +15,26 @@ namespace Plexi
 		Self
 	}
 
-	public static class MatrixExtensions
+	public static partial class MatrixExtensions
 	{
-		public static Matrix ApplyFunction(this Matrix sourceMatrix, Function function, Matrix targetMatrix)
+
+		public static Matrix ApplyFunction(this Matrix sourceMatrix, Arithmetic arithmetic, Matrix targetMatrix)
 		{
-			switch (function)
+			switch (arithmetic)
 			{
-				case Function.Sum:
+				case Arithmetic.Sum:
 					return Sum(sourceMatrix, targetMatrix);
-				case Function.Difference:
+				case Arithmetic.Difference:
 					return Difference(sourceMatrix, targetMatrix);
-				case Function.Average:
+				case Arithmetic.Average:
 					return Average(sourceMatrix, targetMatrix);
-				case Function.Multiply:
+				case Arithmetic.Multiply:
 					return Multiply(sourceMatrix, targetMatrix);
-				case Function.Divide:
+				case Arithmetic.Divide:
 					return Divide(sourceMatrix, targetMatrix);
-				case Function.Min:
+				case Arithmetic.Min:
 					return Min(sourceMatrix, targetMatrix);
-				case Function.Max:
+				case Arithmetic.Max:
 					return Max(sourceMatrix, targetMatrix);
 				default:
 					return sourceMatrix;

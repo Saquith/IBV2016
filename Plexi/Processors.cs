@@ -4,24 +4,37 @@ using System.Drawing;
 namespace Plexi
 {
 	public class ArithmeticProcessor : Processor {
-		private Function _function;
+		private Arithmetic _arithmetic;
 		private Matrix _target;
 
-		public ArithmeticProcessor(Function function, Matrix target)
+		public ArithmeticProcessor(Arithmetic arithmetic, Matrix target)
 		{
-			_function = function;
+			_arithmetic = arithmetic;
 			_target = target;
 		}
 
-		public ArithmeticProcessor(Function function, Bitmap target)
+		public ArithmeticProcessor(Arithmetic arithmetic, Bitmap target)
 		{
-			_function = function;
+			_arithmetic = arithmetic;
 			_target = GetMatrix(target);
 		}
 
 		public override Matrix Process(Matrix source)
 		{
-			return source.ApplyFunction(_function, _target);
+			return source.ApplyFunction(_arithmetic, _target);
+		}
+	}
+	public class MorphologyProcessor : Processor {
+		private Morphology _morphology;
+		private Kernel _kernel;
+
+		public MorphologyProcessor(Morphology morphology, Kernel kernel) {
+			_morphology = morphology;
+			_kernel = kernel;
+		}
+
+		public override Matrix Process(Matrix source) {
+			return source.ApplyFunction(_morphology, _kernel);
 		}
 	}
 

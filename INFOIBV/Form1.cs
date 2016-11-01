@@ -37,35 +37,34 @@ namespace INFOIBV
             pictureBox2.Image = null;                                       // Clear output image
 
             if (OutputImage != null) OutputImage.Dispose();                 // Reset output image
-
-            //TODO use your own processor(s) here
+			
             Processor p1 = new MultiProcessor(new Processor[]
-            {
-                new Grayscale(),
-                new Filter(new Average5X5()), 
-                //new Filter(new Gaussian3X3()),
-                //new Threshold(80),
-                //new Filter(new NoiseReduction3X3()), 
-                //new Negative(),
-                //new RotateRight()
-            });
-	        //OutputImage = p1.Process(InputImage);
-            var image1 = p1.Process(InputImage);                   // Process the image
-
-            Processor p2 = new MultiProcessor(new Processor[]
             {
                 new Grayscale(),
                 new Threshold(80), 
             });
-            var image2 = p2.Process(InputImage);
+			var source = p1.Process(InputImage);
+	        pictureBox1.Image = source;
 
-            Processor p3 = new MultiProcessor(new Processor[]
-            {
-                new ArithmeticProcessor(Function.Difference, image2), 
-            });
-            
-            OutputImage = p3.Process(image1);
-            pictureBox3.Image = image1;
+			//var image1 = new MorphologyProcessor(Morphology.Erosion, new Average3X3()).Process(source);
+			//var image2 = new MorphologyProcessor(Morphology.Dilation, new Average3X3()).Process(source);
+			//OutputImage = new ArithmeticProcessor(Arithmetic.Difference, image2).Process(image1);
+
+			var image1 = new MorphologyProcessor(Morphology.Opening, new Average5X5()).Process(source);
+			var image2 = new MorphologyProcessor(Morphology.Opening, new Average5X5()).Process(image1);
+			OutputImage = new ArithmeticProcessor(Arithmetic.Difference, image2).Process(image1);
+
+			//OutputImage = new ArithmeticProcessor(Arithmetic.Difference, image2).Process(image1);
+			//OutputImage = new MorphologyProcessor(Arithmetic.Erosion, new Average3X3()).Process(image2);
+			//OutputImage = new MorphologyProcessor(Arithmetic.Dilation, new Average5X5()).Process(image2);
+			//Processor p3 = new MultiProcessor(new Processor[] {
+			//	new MorphologyProcessor(Arithmetic.Erosion, new Average3X3()),
+			//	new MorphologyProcessor(Arithmetic.Dilation, new Average3X3()),
+			//	new ArithmeticProcessor(Arithmetic.Difference, ), 
+			//});
+			//OutputImage = p3.Process(image2);
+
+			pictureBox3.Image = image1;
             pictureBox4.Image = image2;
             pictureBox2.Image = OutputImage;                               // Display output image
         }
