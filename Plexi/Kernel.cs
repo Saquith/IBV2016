@@ -88,6 +88,21 @@ namespace Plexi
         }
     }
 
+    public class GaussianAlt5X5 : Kernel
+    {
+        public GaussianAlt5X5()
+        {
+            Matrix = new double[,]
+            {
+                { 2,  4,  5,  4,  2 },
+                { 4,  9, 12,  9,  4 },
+                { 5, 12, 15, 12,  5 },
+                { 4,  9, 12,  9,  4 },
+                { 2,  4,  5,  4,  2 },
+            };
+        }
+    }
+
     public class Smooth3X3 : Kernel
     {
         public Smooth3X3()

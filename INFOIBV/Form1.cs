@@ -41,28 +41,33 @@ namespace INFOIBV
             //TODO use your own processor(s) here
             Processor p1 = new MultiProcessor(new Processor[]
             {
-                new Grayscale(), 
+                new Grayscale(),
+                new Filter(new Average5X5()), 
                 //new Filter(new Gaussian3X3()),
-                //new Filter(new HighPass3X3()),  
-                new Threshold(80),
-                new Filter(new Gaussian3X3()),
-                new Threshold(80),
+                //new Threshold(80),
                 //new Filter(new NoiseReduction3X3()), 
                 //new Negative(),
                 //new RotateRight()
             });
-	        OutputImage = p1.Process(InputImage);
-   //         var image1 = p1.Process(InputImage);                   // Process the image
+	        //OutputImage = p1.Process(InputImage);
+            var image1 = p1.Process(InputImage);                   // Process the image
 
-			//Processor p2 = new MultiProcessor(new Processor[]
-			//{
-			//	new Grayscale(),
-			//});
-			//OutputImage = p2.Process(image1);
+            Processor p2 = new MultiProcessor(new Processor[]
+            {
+                new Grayscale(),
+                new Threshold(80), 
+            });
+            var image2 = p2.Process(InputImage);
 
-
-
-			pictureBox2.Image = OutputImage;                               // Display output image
+            Processor p3 = new MultiProcessor(new Processor[]
+            {
+                new ArithmeticProcessor(Function.Difference, image2), 
+            });
+            
+            OutputImage = p3.Process(image1);
+            pictureBox3.Image = image1;
+            pictureBox4.Image = image2;
+            pictureBox2.Image = OutputImage;                               // Display output image
         }
         
         private void saveButton_Click(object sender, EventArgs e)
