@@ -144,4 +144,17 @@ namespace Plexi
             return 9;
         }
     }
+
+    public class NoiseReduction3X3 : Kernel
+    {
+        public NoiseReduction3X3()
+        {
+            Matrix = new double[,]
+            {
+                { 1, 1, 1 },
+                { 1, 0, 1 },
+                { 1, 1, 1 },
+            };
+        }
+    }
 }
