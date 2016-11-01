@@ -24,7 +24,7 @@ namespace Plexi
             return new Tuple<int, int>(x, y);
         }
 
-        public double Divisor()
+        public virtual double Divisor()
         {
             return Math.Max(Matrix.Cast<double>().Sum(), 1); // the total sum of the matrix is used to preserve luminance
         }
@@ -137,6 +137,11 @@ namespace Plexi
                 { -1,  8, -1 },
                 { -1, -1, -1 },
             };
+        }
+
+        public override double Divisor()
+        {
+            return 9;
         }
     }
 }
