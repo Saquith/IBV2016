@@ -39,7 +39,7 @@ namespace INFOIBV
             if (OutputImage != null) OutputImage.Dispose();                 // Reset output image
 
             //TODO use your own processor(s) here
-            Processor processor = new MultiProcessor(new Processor[]
+            Processor p1 = new MultiProcessor(new Processor[]
             {
                 new Grayscale(), 
                 //new Filter(new Gaussian3X3()),
@@ -51,9 +51,18 @@ namespace INFOIBV
                 //new Negative(),
                 //new RotateRight()
             });
-            OutputImage = processor.Process(InputImage);                   // Process the image
+	        OutputImage = p1.Process(InputImage);
+   //         var image1 = p1.Process(InputImage);                   // Process the image
 
-            pictureBox2.Image = OutputImage;                               // Display output image
+			//Processor p2 = new MultiProcessor(new Processor[]
+			//{
+			//	new Grayscale(),
+			//});
+			//OutputImage = p2.Process(image1);
+
+
+
+			pictureBox2.Image = OutputImage;                               // Display output image
         }
         
         private void saveButton_Click(object sender, EventArgs e)

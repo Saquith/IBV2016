@@ -1,13 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plexi
 {
-    public class Negative : Processor
+	public class ArithmeticProcessor : Processor {
+		private Function _function;
+		private Matrix _target;
+
+		public ArithmeticProcessor(Function function, Matrix target)
+		{
+			_function = function;
+			_target = target;
+		}
+
+		public ArithmeticProcessor(Function function, Bitmap target)
+		{
+			_function = function;
+			_target = GetMatrix(target);
+		}
+
+		public override Matrix Process(Matrix source)
+		{
+			return source.ApplyFunction(_function, _target);
+		}
+	}
+
+	public class Negative : Processor
     {
         public override Color Transform(Color c)
         {
@@ -41,26 +59,26 @@ namespace Plexi
 
     public class Rotate : Processor
     {
-        public override Color[,] Process(Color[,] image)
+        public override Matrix Process(Matrix source)
         {
-            int w = image.GetLength(0), h = image.GetLength(1);
-            var newImage = new Color[h, w];
+            int w = source.X, h = source.Y;
+            var newImage = new Matrix(h, w);
             for (var x = 0; x < w; x++)
                 for (var y = 0; y < h; y++)
-                    newImage[y, x] = image[x, h - y - 1];
+                    newImage[y, x] = source[x, h - y - 1];
             return newImage;
         }
     }
 
     public class RotateRight : Processor
     {
-        public override Color[,] Process(Color[,] image)
+        public override Matrix Process(Matrix source)
         {
-            int w = image.GetLength(0), h = image.GetLength(1);
-            var newImage = new Color[h, w];
-            for (var x = 0; x < w; x++)
+            int w = source.X, h = source.Y;
+			var newImage = new Matrix(h, w);
+			for (var x = 0; x < w; x++)
                 for (var y = 0; y < h; y++)
-                    newImage[y, x] = image[x, h - y - 1];
+                    newImage[y, x] = source[x, h - y - 1];
             return newImage;
         }
     }
@@ -98,19 +116,19 @@ namespace Plexi
         {
             kernel = k;
         }
-        public override Color[,] Process(Color[,] image)
+        public override Matrix Process(Matrix source)
         {
             
-            Color[,] newImage = new Color[image.GetLength(0),image.GetLength(1)];
+            Matrix newImage = new Matrix(source.X,source.Y);
 
             int grayValue = 0;
             double pixelSum = 0;
             int offsetX = kernel.Center().Item1;
             int offsetY = kernel.Center().Item2;
 
-            for (int imageY = offsetY; imageY < (image.GetLength(1) - offsetY); imageY++)
+            for (int imageY = offsetY; imageY < (source.Y - offsetY); imageY++)
             {
-                for (int imageX = offsetX; imageX < (image.GetLength(0) - offsetX); imageX++)
+                for (int imageX = offsetX; imageX < (source.X - offsetX); imageX++)
                 {
                     // reset values after each iteration
                     grayValue = 0;
@@ -123,7 +141,7 @@ namespace Plexi
                         for (int x = -offsetY; x <= offsetX; x++)
                         {
                             // The sum of the pixelvalues multiplied by the kernel values
-                            pixelSum += (image[(imageX + x), (imageY + y)].R) * (kernel.Matrix[x + offsetX, y + offsetY]);
+                            pixelSum += (source[(imageX + x), (imageY + y)].R) * (kernel.Matrix[x + offsetX, y + offsetY]);
                         }
                     }
 

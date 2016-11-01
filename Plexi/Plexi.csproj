@@ -33,7 +33,9 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageArithmetic.cs" />
     <Compile Include="Kernel.cs" />
+    <Compile Include="Matrix.cs" />
     <Compile Include="Plexi.cs" />
     <Compile Include="Processors.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
