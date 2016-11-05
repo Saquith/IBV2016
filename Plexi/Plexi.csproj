@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="Arithmetic.cs" />
     <Compile Include="Kernel.cs" />
+    <Compile Include="Labeling.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Morphology.cs" />
     <Compile Include="Plexi.cs" />

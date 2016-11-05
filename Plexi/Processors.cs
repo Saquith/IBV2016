@@ -38,7 +38,94 @@ namespace Plexi
 		}
 	}
 
-	public class Negative : Processor
+    public class LabelProcessor : Processor
+    {
+        public override Matrix Process(Matrix source)
+        {
+            return source.ApplyFunction();
+        }
+    }
+
+    public class Windowing : Processor
+    {
+        private int _max = 0;
+        private int _min = 255;
+        private int _mul;
+
+        public override Matrix Process(Matrix sourceMatrix)
+        {
+
+            for (int imageY = 0; imageY < sourceMatrix.Y; imageY++)
+            {
+                for (int imageX = 0; imageX < sourceMatrix.X; imageX++)
+                {
+                    var grayValue = sourceMatrix[imageX, imageY].R;
+                
+                    _max = Math.Max(_max, grayValue);
+                    _min = Math.Min(_min, grayValue);
+                }
+            }
+
+            _mul = 255/(_max - _min);
+
+            var returnMatrix = new Matrix(sourceMatrix.X, sourceMatrix.Y);
+            for (int imageY = 0; imageY < sourceMatrix.Y; imageY++)
+            {
+                for (int imageX = 0; imageX < sourceMatrix.X; imageX++)
+                {
+                    var newColorVal = (sourceMatrix[imageX, imageY].R - _min) * _mul;
+                    returnMatrix[imageX, imageY] = Color.FromArgb(newColorVal, newColorVal, newColorVal);
+                }
+            }
+            return returnMatrix;
+        }
+    }
+
+    //public class LabelWindowing : Processor
+    //{
+    //    private int _max = 0;
+    //    private int _min = 255;
+    //    private int _mul;
+
+    //    public override Matrix Process(Matrix sourceMatrix)
+    //    {
+    //        int grayValue = -1;
+
+    //        for (int imageY = 0; imageY < sourceMatrix.Y; imageY++)
+    //        {
+    //            for (int imageX = 0; imageX < sourceMatrix.X; imageX++)
+    //            {
+    //                if (sourceMatrix[imageX, imageY].R != 0)
+    //                {
+    //                    if (grayValue == -1)
+    //                    {
+    //                        _min = sourceMatrix[imageX, imageY].R;
+    //                    }
+
+    //                    grayValue = sourceMatrix[imageX, imageY].R;
+    //                    _max = Math.Max(_max, grayValue);
+    //                    _min = Math.Min(_min, grayValue);
+    //                }
+                        
+    //            }
+    //        }
+
+    //        _mul = 255 / (_max - _min);
+
+    //        var returnMatrix = new Matrix(sourceMatrix.X, sourceMatrix.Y);
+    //        for (int imageY = 0; imageY < sourceMatrix.Y; imageY++)
+    //        {
+    //            for (int imageX = 0; imageX < sourceMatrix.X; imageX++)
+    //            {
+    //                var newColorVal = Math.Max((sourceMatrix[imageX, imageY].R - _min), 0) * _mul;
+    //                returnMatrix[imageX, imageY] = Color.FromArgb(newColorVal, newColorVal, newColorVal);
+    //            }
+    //        }
+    //        return returnMatrix;
+    //    }
+    //}
+
+    public class Negative : Processor
     {
         public override Color Transform(Color c)
         {

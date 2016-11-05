@@ -42,30 +42,18 @@ namespace INFOIBV
             {
                 new Grayscale(),
                 new Threshold(80), 
+                new MorphologyProcessor(Morphology.Opening, new Average5X5()), 
             });
-			var source = p1.Process(InputImage);
-	        pictureBox1.Image = source;
 
-			//var image1 = new MorphologyProcessor(Morphology.Erosion, new Average3X3()).Process(source);
-			//var image2 = new MorphologyProcessor(Morphology.Dilation, new Average3X3()).Process(source);
-			//OutputImage = new ArithmeticProcessor(Arithmetic.Difference, image2).Process(image1);
+            Processor p2 = new MultiProcessor(new Processor[]
+            {
+                //new LabelWindowing(),
+            });
 
-			var image1 = new MorphologyProcessor(Morphology.Opening, new Average5X5()).Process(source);
-			var image2 = new MorphologyProcessor(Morphology.Opening, new Average5X5()).Process(image1);
-			OutputImage = new ArithmeticProcessor(Arithmetic.Difference, image2).Process(image1);
-
-			//OutputImage = new ArithmeticProcessor(Arithmetic.Difference, image2).Process(image1);
-			//OutputImage = new MorphologyProcessor(Arithmetic.Erosion, new Average3X3()).Process(image2);
-			//OutputImage = new MorphologyProcessor(Arithmetic.Dilation, new Average5X5()).Process(image2);
-			//Processor p3 = new MultiProcessor(new Processor[] {
-			//	new MorphologyProcessor(Arithmetic.Erosion, new Average3X3()),
-			//	new MorphologyProcessor(Arithmetic.Dilation, new Average3X3()),
-			//	new ArithmeticProcessor(Arithmetic.Difference, ), 
-			//});
-			//OutputImage = p3.Process(image2);
-
-			pictureBox3.Image = image1;
-            pictureBox4.Image = image2;
+            var image1 = p1.Process(InputImage);
+            var image2 = new LabelProcessor().Process(image1);
+            OutputImage = image2;
+            
             pictureBox2.Image = OutputImage;                               // Display output image
         }
         
