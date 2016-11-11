@@ -88,11 +88,11 @@ namespace Plexi
 		}
 
 		private static Matrix Opening(Matrix sourceMatrix, Kernel kernel) {
-			return Erosion(Dilation(sourceMatrix, kernel), kernel);
+			return Dilation(Erosion(sourceMatrix, kernel), kernel);
 		}
 
 		private static Matrix Closing(Matrix sourceMatrix, Kernel kernel) {
-			return Dilation(Erosion(sourceMatrix, kernel), kernel);
+			return Erosion(Dilation(sourceMatrix, kernel), kernel);
 		}
 	}
 }
