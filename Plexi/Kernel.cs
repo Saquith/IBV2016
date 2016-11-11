@@ -45,7 +45,29 @@ namespace Plexi
         }
     }
 
-    public class Average5X5 : Kernel
+	public class DistanceTransformTop : Kernel {
+		public DistanceTransformTop() {
+			Matrix = new double[,]
+			{
+				{ 2, 1, 2 },
+				{ 1, 0, -1 },
+				{ -1, -1, -1 },
+			};
+		}
+	}
+
+	public class DistanceTransformBottom : Kernel {
+		public DistanceTransformBottom() {
+			Matrix = new double[,]
+			{
+				{ -1, -1, -1 },
+				{ -1, 0, 1 },
+				{ 2, 1, 2 },
+			};
+		}
+	}
+
+	public class Average5X5 : Kernel
     {
         public Average5X5()
         {

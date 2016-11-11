@@ -24,6 +24,59 @@ namespace Plexi
 			return source.ApplyFunction(_arithmetic, _target);
 		}
 	}
+
+	public class DistanceTransformProcessor : Processor {
+		public override Matrix Process(Matrix source) {
+			source = PassTop(source);
+			return PassBottom(source);
+		}
+
+		private Matrix PassTop(Matrix sourceMatrix) {
+			var kernel = new DistanceTransformTop();
+			int offsetX = kernel.Center().Item1;
+			int offsetY = kernel.Center().Item2;
+
+			for (int imageY = offsetY; imageY < (sourceMatrix.Y - offsetY); imageY++) {
+				for (int imageX = offsetX; imageX < (sourceMatrix.X - offsetX); imageX++) {
+					sourceMatrix[imageX, imageY] = GetMinValue(sourceMatrix, kernel, imageX, imageY, offsetX, offsetY);
+				}
+			}
+			return sourceMatrix;
+		}
+
+		private Matrix PassBottom(Matrix sourceMatrix) {
+			var kernel = new DistanceTransformBottom();
+			int offsetX = kernel.Center().Item1;
+			int offsetY = kernel.Center().Item2;
+
+			for (int imageY = (sourceMatrix.Y - offsetY - 1); imageY > offsetY; imageY--) {
+				for (int imageX = (sourceMatrix.X - offsetX - 1); imageX > offsetX; imageX--) {
+					sourceMatrix[imageX, imageY] = GetMinValue(sourceMatrix, kernel, imageX, imageY, offsetX, offsetY);
+				}
+			}
+			return sourceMatrix;
+		}
+
+		private Color GetMinValue(Matrix sourceMatrix, Kernel kernel, int imageX, int imageY, int offsetX, int offsetY) {
+			// reset values after each iteration
+			var grayValue = 0;
+
+			var minValue = int.MaxValue;
+
+			// for loop goes through the kernel
+			for (int y = -offsetY; y <= offsetY; y++) {
+				for (int x = -offsetX; x <= offsetX; x++) {
+					var currentValue = kernel.Matrix[x + offsetX, y + offsetY];
+					if (currentValue.Equals(-1)) {
+						continue;
+					}
+					minValue = Math.Min(sourceMatrix[imageX + x, imageY + y].R + (int)currentValue, minValue);
+				}
+			}
+			return Color.FromArgb(minValue, minValue, minValue);
+		}
+	}
+
 	public class MorphologyProcessor : Processor {
 		private Morphology _morphology;
 		private Kernel _kernel;
