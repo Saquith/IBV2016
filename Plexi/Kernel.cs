@@ -58,9 +58,41 @@ namespace Plexi
                 { 1, 1, 1, 1, 1 },
             };
         }
-    }
+	}
 
-    public class Gaussian3X3 : Kernel
+	public class Average7X7 : Kernel {
+		public Average7X7() {
+			Matrix = new double[,]
+			{
+				{ 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1 },
+			};
+		}
+	}
+
+	public class Average9X9 : Kernel {
+		public Average9X9() {
+			Matrix = new double[,]
+			{
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			};
+		}
+	}
+
+	public class Gaussian3X3 : Kernel
     {
         public Gaussian3X3()
         {

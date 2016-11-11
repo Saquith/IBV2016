@@ -16,7 +16,7 @@ namespace Plexi
 		public ArithmeticProcessor(Arithmetic arithmetic, Bitmap target)
 		{
 			_arithmetic = arithmetic;
-			_target = GetMatrix(target);
+			_target = target.GetMatrix();
 		}
 
 		public override Matrix Process(Matrix source)
@@ -35,6 +35,60 @@ namespace Plexi
 
 		public override Matrix Process(Matrix source) {
 			return source.ApplyFunction(_morphology, _kernel);
+		}
+	}
+
+	public class ReconstructionProcessor : Processor {
+		private Matrix _mask;
+		private Kernel _kernel;
+		private int _erosionCount, _dilationCount;
+
+		public ReconstructionProcessor(Bitmap image, Kernel kernel, int erosions = 5, int dilations = 5) {
+			_mask = image.GetMatrix();
+			_kernel = kernel;
+			_erosionCount = erosions;
+			_dilationCount = dilations;
+		}
+
+		public override Matrix Process(Matrix source) {
+			for (int i = 0; i < _erosionCount; i++) {
+				source = source.ApplyFunction(Morphology.Erosion, _kernel);
+			}
+			for (int i = 0; i < _dilationCount; i++) {
+				source = DilationWithMask(source, _mask, _kernel);
+			}
+			return source;
+		}
+
+		private Matrix DilationWithMask(Matrix sourceMatrix, Matrix mask, Kernel kernel) {
+			var returnMatrix = new Matrix(sourceMatrix.X, sourceMatrix.Y);
+			int offsetX = kernel.Center().Item1;
+			int offsetY = kernel.Center().Item2;
+
+			for (int imageY = offsetY; imageY < (sourceMatrix.Y - offsetY); imageY++) {
+				for (int imageX = offsetX; imageX < (sourceMatrix.X - offsetX); imageX++) {
+					if (mask[imageX, imageY].R <= 0) {
+						continue;
+					}
+
+					// reset values after each iteration
+					var grayValue = 0;
+					var maxValue = 0;
+
+					// for loop goes through the kernel
+					for (int y = -offsetY; y <= offsetY; y++) {
+						for (int x = -offsetX; x <= offsetX; x++) {
+							if (kernel.Matrix[x + offsetX, y + offsetY].Equals(1)) {
+								maxValue = Math.Max(sourceMatrix[imageX + x, imageY + y].R, maxValue);
+							}
+						}
+					}
+					grayValue = maxValue;
+
+					returnMatrix[imageX, imageY] = Color.FromArgb(grayValue, grayValue, grayValue);
+				}
+			}
+			return returnMatrix;
 		}
 	}
 

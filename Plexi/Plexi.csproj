@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arithmetic.cs" />
+    <Compile Include="BitmapExtensions.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="Labeling.cs" />
     <Compile Include="Matrix.cs" />

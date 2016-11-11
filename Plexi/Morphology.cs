@@ -59,8 +59,7 @@ namespace Plexi
 			return returnMatrix;
 		}
 
-		private static Matrix Dilation(Matrix sourceMatrix, Kernel kernel)
-		{
+		private static Matrix Dilation(Matrix sourceMatrix, Kernel kernel) {
 			var returnMatrix = new Matrix(sourceMatrix.X, sourceMatrix.Y);
 			int offsetX = kernel.Center().Item1;
 			int offsetY = kernel.Center().Item2;
@@ -74,7 +73,7 @@ namespace Plexi
 					// for loop goes through the kernel
 					for (int y = -offsetY; y <= offsetY; y++) {
 						for (int x = -offsetX; x <= offsetX; x++) {
-							if (kernel.Matrix[x + offsetX, y + offsetY] == 1) {
+							if (kernel.Matrix[x + offsetX, y + offsetY].Equals(1)) {
 								maxValue = Math.Max(sourceMatrix[imageX + x, imageY + y].R, maxValue);
 							}
 						}

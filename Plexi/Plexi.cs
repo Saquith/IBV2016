@@ -32,7 +32,7 @@ namespace Plexi
         public Bitmap Process(Bitmap bitmap)
         {
             //Construct a color grid from the bitmap.
-	        var image = GetMatrix(bitmap);
+	        var image = bitmap.GetMatrix();
 
             //Perform processing on the color grid.
             var newImage = Process(image);
@@ -46,15 +46,6 @@ namespace Plexi
             //Return the new Bitmap.
             return newBitmap;
         }
-
-	    protected Matrix GetMatrix(Bitmap bitmap)
-	    {
-			var image = new Matrix(bitmap.Width, bitmap.Height);
-			for (var x = 0; x < bitmap.Width; x++)
-				for (var y = 0; y < bitmap.Height; y++)
-					image[x, y] = bitmap.GetPixel(x, y);
-		    return image;
-	    }
 
 	    public virtual Matrix Process(Matrix source)
         {
