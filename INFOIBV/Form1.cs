@@ -1,17 +1,19 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Plexi;
 using Plexi = Plexi.Plexi;
 
-namespace INFOIBV
-{
-    public partial class INFOIBV : Form
-    {
-        private Bitmap InputImage;
-        private Bitmap OutputImage;
+namespace INFOIBV {
+	public partial class INFOIBV : Form {
+		private Bitmap InputImage;
+		private Bitmap OutputImage;
+		private Dictionary<string, Bitmap> _queuedImages;
 
-        public INFOIBV()
+	    public INFOIBV()
         {
             InitializeComponent();
         }
@@ -28,13 +30,15 @@ namespace INFOIBV
                     InputImage.Size.Height > 512 || InputImage.Size.Width > 512) // Dimension check
                     MessageBox.Show("Error in image dimensions (have to be > 0 and <= 512)");
                 else
-                    pictureBox1.Image = InputImage;                         // Display input image
+                    _inputBox.Image = InputImage;                         // Display input image
             }
         }
 
 		private void applyButton_Click(object sender, EventArgs e) {
 			if (InputImage == null) return; // Get out if no input image
-			pictureBox2.Image = null; // Clear output image
+			_outputBox.Image = null; // Clear output image
+			_queuedImages = new Dictionary<string, Bitmap>();
+			_imageListBox.ClearList();
 
 			if (OutputImage != null) OutputImage.Dispose(); // Reset output image
 
@@ -44,6 +48,7 @@ namespace INFOIBV
 				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
 			});
 			var pre = ppre.Process(InputImage);
+			AddImageToPreview(pre, "Preparation step");
 
 			// White top hat
 			Processor pdark = new MultiProcessor(new Processor[] {
@@ -52,6 +57,7 @@ namespace INFOIBV
 				new Threshold(38),
 			});
 			var darkImage = pdark.Process(pre);
+			AddImageToPreview(darkImage, "White tophat thresholded image");
 
 			// Thresholded image
 			Processor ppre2 = new MultiProcessor(new Processor[] {
@@ -60,6 +66,7 @@ namespace INFOIBV
 			});
 
 			var lightImage = ppre2.Process(InputImage);
+			AddImageToPreview(lightImage, "Light thresholded image");
 
 			// Combine white top hat & thresholded images, additional processing steps for connecting objects
 			Processor pcombine = new MultiProcessor(new Processor[] {
@@ -71,25 +78,44 @@ namespace INFOIBV
 				new MorphologyProcessor(Morphology.Erosion, new Average3X3()),
 				new MorphologyProcessor(Morphology.Erosion, new Average3X3()),
 			});
-			var fullimage = pcombine.Process(lightImage);
+			var fullImage = pcombine.Process(lightImage);
+			AddImageToPreview(fullImage, "Combined thresholded image");
 
 			// Remove edge objects
 			Processor p2 = new MultiProcessor(new Processor[] {
-				new ReconstructionProcessor(fullimage, new Average3X3(), 0, 204),
-				new ArithmeticProcessor(Arithmetic.Difference, fullimage),
+				new ReconstructionProcessor(fullImage, new Average3X3(), 0, 204),
+				new ArithmeticProcessor(Arithmetic.Difference, fullImage),
 			});
 
 			var edge = CreateEdgeMatrix(InputImage, 5).ToBitmap();
 			var edgeRemoved = p2.Process(edge);
+			AddImageToPreview(edgeRemoved, "Edge objects removed");
 
+			// Label & create final image
 			Processor p4 = new MultiProcessor(new Processor[] {
 			});
 			OutputImage = p4.Process(edgeRemoved);
 
-			pictureBox1.Image = lightImage;
-			pictureBox3.Image = fullimage;
-			pictureBox4.Image = edgeRemoved;
-			pictureBox2.Image = OutputImage; // Display output image
+			_inputBox.Image = lightImage;
+			_outputBox.Image = OutputImage; // Display output image
+
+			ViewImages();
+		}
+
+		private void ViewImages() {
+			foreach (var kvp in _queuedImages) {
+				_imageListBox.AddImage(kvp.Value, kvp.Key);
+			}
+			_currentBox.Image = _queuedImages.Values.FirstOrDefault();
+			_imageListBox.Clicked += this.SetCurrentImage;
+		}
+
+		private void SetCurrentImage(object sender, EventArgs e) {
+			_currentBox.Image = (sender as PictureBox).Image;
+		}
+
+		private void AddImageToPreview(Bitmap bitmap, string s) {
+			_queuedImages.Add(s, bitmap);
 		}
 
 		private Matrix CreateEdgeMatrix(Bitmap image1, int width) {
