@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("INFOIBV")]
+[assembly: AssemblyTitle("INFOIBVForm")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("UU")]
-[assembly: AssemblyProduct("INFOIBV")]
+[assembly: AssemblyProduct("INFOIBVForm")]
 [assembly: AssemblyCopyright("Copyright © UU 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

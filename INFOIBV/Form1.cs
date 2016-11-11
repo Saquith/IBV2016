@@ -8,12 +8,12 @@ using Plexi;
 using Plexi = Plexi.Plexi;
 
 namespace INFOIBV {
-	public partial class INFOIBV : Form {
+	public partial class INFOIBVForm : Form {
 		private Bitmap InputImage;
 		private Bitmap OutputImage;
 		private Dictionary<string, Bitmap> _queuedImages;
 
-	    public INFOIBV()
+	    public INFOIBVForm()
         {
             InitializeComponent();
         }
@@ -93,6 +93,7 @@ namespace INFOIBV {
 
 			// Label & create final image
 			Processor p4 = new MultiProcessor(new Processor[] {
+				new DistanceTransformProcessor(),
 			});
 			OutputImage = p4.Process(edgeRemoved);
 
@@ -111,7 +112,9 @@ namespace INFOIBV {
 		}
 
 		private void SetCurrentImage(object sender, EventArgs e) {
-			_currentBox.Image = (sender as PictureBox).Image;
+			if ((sender as PictureBox).Image != null) {
+				_currentBox.Image = (sender as PictureBox).Image;
+			}
 		}
 
 		private void AddImageToPreview(Bitmap bitmap, string s) {
@@ -139,5 +142,17 @@ namespace INFOIBV {
             if (saveImageDialog.ShowDialog() == DialogResult.OK)
                 OutputImage.Save(saveImageDialog.FileName);                 // Save the output image
         }
-    }
+
+		private void _outputBox_Click(object sender, EventArgs e) {
+			if ((sender as PictureBox).Image != null) {
+				_currentBox.Image = (sender as PictureBox).Image;
+			}
+		}
+
+		private void _inputBox_Click(object sender, EventArgs e) {
+			if ((sender as PictureBox).Image != null) {
+				_currentBox.Image = (sender as PictureBox).Image;
+			}
+		}
+	}
 }

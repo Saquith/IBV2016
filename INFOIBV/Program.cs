@@ -15,7 +15,7 @@ namespace INFOIBV
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new INFOIBV());
+            Application.Run(new INFOIBVForm());
         }
     }
 }

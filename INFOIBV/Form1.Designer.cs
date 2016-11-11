@@ -1,6 +1,6 @@
 ﻿namespace INFOIBV
 {
-    partial class INFOIBV
+    partial class INFOIBVForm
     {
         /// <summary>
         /// Required designer variable.
@@ -37,7 +37,7 @@
 			this.saveButton = new System.Windows.Forms.Button();
 			this._outputBox = new System.Windows.Forms.PictureBox();
 			this._currentBox = new System.Windows.Forms.PictureBox();
-			this._imageListBox = new ImageListBox();
+			this._imageListBox = new INFOIBV.ImageListBox();
 			((System.ComponentModel.ISupportInitialize)(this._inputBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this._outputBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this._currentBox)).BeginInit();
@@ -75,10 +75,11 @@
 			this._inputBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this._inputBox.TabIndex = 2;
 			this._inputBox.TabStop = false;
+			this._inputBox.Click += new System.EventHandler(this._inputBox_Click);
 			// 
 			// applyButton
 			// 
-			this.applyButton.Location = new System.Drawing.Point(478, 12);
+			this.applyButton.Location = new System.Drawing.Point(469, 12);
 			this.applyButton.Name = "applyButton";
 			this.applyButton.Size = new System.Drawing.Size(103, 23);
 			this.applyButton.TabIndex = 3;
@@ -93,7 +94,7 @@
 			// 
 			// saveButton
 			// 
-			this.saveButton.Location = new System.Drawing.Point(948, 11);
+			this.saveButton.Location = new System.Drawing.Point(590, 12);
 			this.saveButton.Name = "saveButton";
 			this.saveButton.Size = new System.Drawing.Size(95, 23);
 			this.saveButton.TabIndex = 4;
@@ -109,6 +110,7 @@
 			this._outputBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this._outputBox.TabIndex = 5;
 			this._outputBox.TabStop = false;
+			this._outputBox.Click += new System.EventHandler(this._outputBox_Click);
 			// 
 			// _currentBox
 			// 
@@ -126,7 +128,7 @@
 			this._imageListBox.Size = new System.Drawing.Size(1730, 363);
 			this._imageListBox.TabIndex = 9;
 			// 
-			// INFOIBV
+			// INFOIBVForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -140,9 +142,9 @@
 			this.Controls.Add(this.imageFileName);
 			this.Controls.Add(this.LoadImageButton);
 			this.Location = new System.Drawing.Point(10, 10);
-			this.Name = "INFOIBV";
+			this.Name = "INFOIBVForm";
 			this.ShowIcon = false;
-			this.Text = "INFOIBV";
+			this.Text = "INFOIBVForm";
 			((System.ComponentModel.ISupportInitialize)(this._inputBox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this._outputBox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this._currentBox)).EndInit();
