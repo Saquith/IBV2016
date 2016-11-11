@@ -38,35 +38,42 @@ namespace INFOIBV
 
 			if (OutputImage != null) OutputImage.Dispose(); // Reset output image
 
+			// Preparation step for white top hat
 			Processor ppre = new MultiProcessor(new Processor[] {
 				new Grayscale(),
 				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
 			});
 			var pre = ppre.Process(InputImage);
 
+			// White top hat
 			Processor pdark = new MultiProcessor(new Processor[] {
 				new Grayscale(),
 				new ArithmeticProcessor(Arithmetic.Difference, InputImage),
 				new Threshold(38),
-				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
-				new MorphologyProcessor(Morphology.Closing, new Average3X3()),
 			});
 			var darkImage = pdark.Process(pre);
 
+			// Thresholded image
 			Processor ppre2 = new MultiProcessor(new Processor[] {
 				new Grayscale(),
-				new Threshold(60),
-				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
-				new MorphologyProcessor(Morphology.Closing, new Average3X3()),
+				new Threshold(77),
 			});
 
 			var lightImage = ppre2.Process(InputImage);
 
+			// Combine white top hat & thresholded images, additional processing steps for connecting objects
 			Processor pcombine = new MultiProcessor(new Processor[] {
 				new ArithmeticProcessor(Arithmetic.Sum, darkImage),
+				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
+				new MorphologyProcessor(Morphology.Closing, new Average3X3()),
+				new MorphologyProcessor(Morphology.Dilation, new Average3X3()),
+				new MorphologyProcessor(Morphology.Dilation, new Average3X3()),
+				new MorphologyProcessor(Morphology.Erosion, new Average3X3()),
+				new MorphologyProcessor(Morphology.Erosion, new Average3X3()),
 			});
 			var fullimage = pcombine.Process(lightImage);
 
+			// Remove edge objects
 			Processor p2 = new MultiProcessor(new Processor[] {
 				new ReconstructionProcessor(fullimage, new Average3X3(), 0, 204),
 				new ArithmeticProcessor(Arithmetic.Difference, fullimage),
