@@ -96,8 +96,8 @@ namespace INFOIBV {
 			});
 			OutputImage = p4.Process(edgeRemoved);
 
-			_inputBox.Image = lightImage;
-			_outputBox.Image = OutputImage; // Display output image
+			_inputBox.Image = InputImage;
+			_outputBox.Image = OutputImage;
 
 			ViewImages();
 		}
