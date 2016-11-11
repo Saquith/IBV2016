@@ -145,14 +145,6 @@ namespace Plexi
 		}
 	}
 
-    public class LabelProcessor : Processor
-    {
-        public override Matrix Process(Matrix source)
-        {
-            return source.ApplyFunction();
-        }
-    }
-
     public class Windowing : Processor
     {
         private int _max = 0;

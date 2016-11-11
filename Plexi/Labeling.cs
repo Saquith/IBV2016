@@ -8,15 +8,9 @@ using System.Threading.Tasks;
 namespace Plexi
 {
 
-    public static partial class MatrixExtensions
+    public class Labeling : Processor
     {
-
-        public static Matrix ApplyFunction(this Matrix sourceMatrix)
-        {
-            return Labeling(sourceMatrix);
-        }
-
-        public static Matrix Labeling(Matrix sourceMatrix)
+        public override Matrix Process(Matrix sourceMatrix)
         {
             var grayCounter = 50;
             var returnMatrix = sourceMatrix;
@@ -39,7 +33,7 @@ namespace Plexi
             return returnMatrix;
         }
 
-        private static void FloodFill(Point point, Color white, Color resultColor, Matrix matrix)
+        public static void FloodFill(Point point, Color white, Color resultColor, Matrix matrix)
         {
             var queue = new List<Point>();
 
