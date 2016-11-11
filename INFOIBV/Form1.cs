@@ -38,35 +38,50 @@ namespace INFOIBV
 
 			if (OutputImage != null) OutputImage.Dispose(); // Reset output image
 
-			Processor p1 = new MultiProcessor(new Processor[] {
+			Processor ppre = new MultiProcessor(new Processor[] {
+				new Grayscale(),
+				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
+			});
+			var pre = ppre.Process(InputImage);
+
+			Processor pdark = new MultiProcessor(new Processor[] {
+				new Grayscale(),
+				new ArithmeticProcessor(Arithmetic.Difference, InputImage),
+				new Threshold(38),
+				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
+				new MorphologyProcessor(Morphology.Closing, new Average3X3()),
+			});
+			var darkImage = pdark.Process(pre);
+
+			Processor ppre2 = new MultiProcessor(new Processor[] {
 				new Grayscale(),
 				new Threshold(60),
-				new MorphologyProcessor(Morphology.Opening, new Average5X5()),
-				new MorphologyProcessor(Morphology.Erosion, new Average5X5()),
+				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
+				new MorphologyProcessor(Morphology.Closing, new Average3X3()),
 			});
 
-			var image1 = p1.Process(InputImage);
+			var lightImage = ppre2.Process(InputImage);
+
+			Processor pcombine = new MultiProcessor(new Processor[] {
+				new ArithmeticProcessor(Arithmetic.Sum, darkImage),
+			});
+			var fullimage = pcombine.Process(lightImage);
 
 			Processor p2 = new MultiProcessor(new Processor[] {
-				new ReconstructionProcessor(image1, new Average9X9(), 0, 51),
+				new ReconstructionProcessor(fullimage, new Average3X3(), 0, 204),
+				new ArithmeticProcessor(Arithmetic.Difference, fullimage),
 			});
 
-			var edge = CreateEdgeMatrix(image1, 5).ToBitmap();
-			var image2 = p2.Process(edge);
+			var edge = CreateEdgeMatrix(InputImage, 5).ToBitmap();
+			var edgeRemoved = p2.Process(edge);
 
-			Processor p3 = new MultiProcessor(new Processor[] {
-				new ArithmeticProcessor(Arithmetic.Difference, image1), 
+			Processor p4 = new MultiProcessor(new Processor[] {
 			});
-			var image3 = p3.Process(image2);
+			OutputImage = p4.Process(edgeRemoved);
 
-			OutputImage = image3;
-
-			//var image3 = new LabelProcessor().Process(image1);
-			//OutputImage = image3;
-
-			pictureBox1.Image = image2;
-			pictureBox3.Image = image1;
-			pictureBox4.Image = edge;
+			pictureBox1.Image = lightImage;
+			pictureBox3.Image = fullimage;
+			pictureBox4.Image = edgeRemoved;
 			pictureBox2.Image = OutputImage; // Display output image
 		}
 
