@@ -48,12 +48,12 @@ namespace Plexi
                 queue.RemoveAt(0);
 
                 // keep going left untill we reach the border
-                while (left.X > 0 && matrix[left.X-1, left.Y] == white)
+                while (left.X > 0 && matrix[left.X-1, left.Y].R == 255)
                 {
                     left.X--;
                 }
                 // keep going right untill we reach the border
-                while (right.X < matrix.X && matrix[right.X+1, right.Y] == white)
+                while (right.X + 1 < matrix.X && matrix[right.X+1, right.Y].R == 255)
                 {
                     right.X++;
                 }
@@ -61,11 +61,11 @@ namespace Plexi
                 for (int i = left.X; i <= right.X; i++)
                 {
                     matrix[i, n.Y] = resultColor;
-                    if ((n.Y - 1) >= 0 && matrix[i,(n.Y -1)] == white)
+                    if ((n.Y - 1) >= 0 && matrix[i,(n.Y -1)].R == 255)
                     {
                         queue.Add(new Point(i, (n.Y - 1))); // add upstairs neighbour to the queue
                     }
-                    if ((n.Y + 1) < matrix.Y && matrix[i, (n.Y + 1)] == white)
+                    if ((n.Y + 1) < matrix.Y && matrix[i, (n.Y + 1)].R == 255)
                     {
                         queue.Add(new Point(i, (n.Y + 1))); // add downstairs neighbour to the queue
                     }

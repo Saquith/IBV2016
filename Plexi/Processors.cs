@@ -1,41 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.Remoting.Messaging;
+using System.Linq;
 
 namespace Plexi {
-	public class WaterShedProcessor : Processor {
-		private int _threshold;
-
-		public WaterShedProcessor(int threshold) {
-			_threshold = threshold;
-		}
-
-		public override Matrix Process(Matrix source) {
-			var returnMatrix = new Matrix(source.X, source.Y);
-			while (_threshold < 255) {
-				for (int x = 0; x < source.X; x++) {
-					for (int y = 0; y < source.Y; y++) {
-						var neighbourCount = 0;
-						for (int offsetX = -1; offsetX + x >= 0 && offsetX + x < source.X; offsetX++) {
-							for (int offsetY = -1; offsetY + y >= 0 && offsetY + y < source.Y; offsetY++) {
-								if (source[x + offsetX, y + offsetY].R != 0 && source[x + offsetX, y + offsetY].R < _threshold) {
-									neighbourCount++;
-								}
-							}
-						}
-						if (neighbourCount > 1) {
-							source[x, y] = Color.FromArgb(0, 0, 0);
-						} else {
-							source[x, y] = Color.FromArgb(_threshold, _threshold, _threshold);
-						}
-					}
-				}
-				_threshold++;
-			}
-			return returnMatrix;
-		}
-	}
-
 	public class ArithmeticProcessor : Processor {
 		private Arithmetic _arithmetic;
 		private Matrix _target;
