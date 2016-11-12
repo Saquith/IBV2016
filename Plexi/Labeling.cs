@@ -33,7 +33,7 @@ namespace Plexi
             return returnMatrix;
         }
 
-        public static void FloodFill(Point point, Color white, Color resultColor, Matrix matrix)
+        public static void FloodFill(Point point, Color color, Color resultColor, Matrix matrix)
         {
             var queue = new List<Point>();
 
@@ -48,12 +48,12 @@ namespace Plexi
                 queue.RemoveAt(0);
 
                 // keep going left untill we reach the border
-                while (left.X > 0 && matrix[left.X-1, left.Y] == white)
+                while (left.X > 0 && matrix[left.X-1, left.Y] == color)
                 {
                     left.X--;
                 }
                 // keep going right untill we reach the border
-                while (right.X < matrix.X && matrix[right.X+1, right.Y] == white)
+                while (right.X < matrix.X && matrix[right.X+1, right.Y] == color)
                 {
                     right.X++;
                 }
@@ -61,11 +61,11 @@ namespace Plexi
                 for (int i = left.X; i <= right.X; i++)
                 {
                     matrix[i, n.Y] = resultColor;
-                    if ((n.Y - 1) >= 0 && matrix[i,(n.Y -1)] == white)
+                    if ((n.Y - 1) >= 0 && matrix[i,(n.Y -1)] == color)
                     {
                         queue.Add(new Point(i, (n.Y - 1))); // add upstairs neighbour to the queue
                     }
-                    if ((n.Y + 1) < matrix.Y && matrix[i, (n.Y + 1)] == white)
+                    if ((n.Y + 1) < matrix.Y && matrix[i, (n.Y + 1)] == color)
                     {
                         queue.Add(new Point(i, (n.Y + 1))); // add downstairs neighbour to the queue
                     }
