@@ -27,6 +27,27 @@ namespace Plexi {
 		}
 	}
 
+	public class WindowingProcessor : Processor {
+		public override Matrix Process(Matrix source) {
+			var returnMatrix = new Matrix(source.X, source.Y);
+			var highestValue = -1;
+			var lowestValue = int.MaxValue;
+			for (int x = 0; x < source.X; x++) {
+				for (int y = 0; y < source.Y; y++) {
+					highestValue = Math.Max(source[x, y].R, highestValue);
+					lowestValue = Math.Min(source[x, y].R, lowestValue);
+				}
+			}
+			for (int x = 0; x < source.X; x++) {
+				for (int y = 0; y < source.Y; y++) {
+					var grayValue = source[x, y].R*255/(highestValue - lowestValue);
+					returnMatrix[x, y] = Color.FromArgb(grayValue, grayValue, grayValue);
+				}
+			}
+			return returnMatrix;
+		}
+	}
+
 	public class DistanceTransformProcessor : Processor {
 		public override Matrix Process(Matrix source) {
 			source = PassTop(source);

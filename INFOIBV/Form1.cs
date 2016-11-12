@@ -107,7 +107,7 @@ namespace INFOIBV {
 			var filteredB = processor.Process(edgeRemoved);
 
 			processor = new MultiProcessor(new Processor[] {
-				new FilterObjects(0.60f, 80, 1),
+				new FilterObjects(0.60f, 160, 1),
 			});
 			var filteredC = processor.Process(edgeRemoved);
 
@@ -130,8 +130,9 @@ namespace INFOIBV {
 
 			// Compile Output image from ABC
 			var fullImageProcessor = new MultiProcessor(new Processor[] {
-				new ArithmeticProcessor(Arithmetic.Sum, labelledA), 
-				new ArithmeticProcessor(Arithmetic.Sum, labelledB), 
+				new ArithmeticProcessor(Arithmetic.Sum, labelledA),
+				new ArithmeticProcessor(Arithmetic.Sum, labelledB),
+				new WindowingProcessor(),
 			});
 			OutputImage = fullImageProcessor.Process(labelledC);
 			AddImageToPreview(OutputImage, "Combined result");
