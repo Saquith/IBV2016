@@ -94,6 +94,8 @@ namespace INFOIBV {
 			// Label & create final image
 			Processor p4 = new MultiProcessor(new Processor[] {
 				new DistanceTransformProcessor(),
+				new Negative(), 
+				new WaterShedProcessor(200),
 			});
 			OutputImage = p4.Process(edgeRemoved);
 
