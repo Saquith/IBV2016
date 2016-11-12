@@ -71,12 +71,7 @@ namespace INFOIBV {
 			// Combine white top hat & thresholded images, additional processing steps for connecting objects
 			Processor pcombine = new MultiProcessor(new Processor[] {
 				new ArithmeticProcessor(Arithmetic.Sum, darkImage),
-				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
-				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
-				new MorphologyProcessor(Morphology.Closing, new Average3X3()),
-				new MorphologyProcessor(Morphology.Dilation, new Average3X3()),
-				new MorphologyProcessor(Morphology.Erosion, new Average3X3()),
-				new MorphologyProcessor(Morphology.Erosion, new Average3X3()),
+				new MorphologyProcessor(Morphology.Closing, new Average5X5()),
 			});
 			var fullImage = pcombine.Process(lightImage);
 			AddImageToPreview(fullImage, "Combined thresholded image");
