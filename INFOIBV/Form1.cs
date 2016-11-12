@@ -72,8 +72,8 @@ namespace INFOIBV {
 			Processor pcombine = new MultiProcessor(new Processor[] {
 				new ArithmeticProcessor(Arithmetic.Sum, darkImage),
 				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
+				new MorphologyProcessor(Morphology.Opening, new Average3X3()),
 				new MorphologyProcessor(Morphology.Closing, new Average3X3()),
-				new MorphologyProcessor(Morphology.Dilation, new Average3X3()),
 				new MorphologyProcessor(Morphology.Dilation, new Average3X3()),
 				new MorphologyProcessor(Morphology.Erosion, new Average3X3()),
 				new MorphologyProcessor(Morphology.Erosion, new Average3X3()),
@@ -91,23 +91,50 @@ namespace INFOIBV {
 			var edgeRemoved = edgeRemoveProcessor.Process(edge);
 			AddImageToPreview(edgeRemoved, "Edge objects removed");
 
-			var distanceTransformed = new DistanceTransformProcessor().Process(edgeRemoved);
-			AddImageToPreview(distanceTransformed, "Distance transform");
+			//var distanceTransformed = new DistanceTransformProcessor().Process(edgeRemoved);
+			//AddImageToPreview(distanceTransformed, "Distance transform");
+			// No longer needed as WaterShed is off the board for now
 
-			// 
+			// Create three sets of filters, use the previous (more specific) one to filter the new one (more generic)
 			Processor processor = new MultiProcessor(new Processor[] {
+				new FilterObjects(0.80f, 80, 1),
 			});
-			var image = processor.Process(distanceTransformed);
-			AddImageToPreview(image, "...");
+			var filteredA = processor.Process(edgeRemoved);
 
-			// Label
-			Processor labelProcessor = new MultiProcessor(new Processor[] {
-				//new Labeling(),
+			processor = new MultiProcessor(new Processor[] {
+				new FilterObjects(0.70f, 120, 1),
 			});
-			var labelled = labelProcessor.Process(image);
-			AddImageToPreview(labelled, "Labelling");
+			var filteredB = processor.Process(edgeRemoved);
 
-			OutputImage = labelled;
+			processor = new MultiProcessor(new Processor[] {
+				new FilterObjects(0.60f, 80, 1),
+			});
+			var filteredC = processor.Process(edgeRemoved);
+
+			// Remove what's already been filtered before & filter C before B as B still contains A
+			// FilteredC - FilteredB
+			filteredC = new ArithmeticProcessor(Arithmetic.Difference, filteredC).Process(filteredB);
+			// FilteredB - FilteredA
+			filteredB = new ArithmeticProcessor(Arithmetic.Difference, filteredB).Process(filteredA);
+			AddImageToPreview(filteredA, "Filtered strict");
+			AddImageToPreview(filteredB, "Filtered intermediate");
+			AddImageToPreview(filteredC, "Filtered lenient");
+
+			// Labelling, mark from white > gray for better visuals
+			var labelledA = new Labeling(225).Process(filteredA);
+			AddImageToPreview(labelledA, "Labelling A");
+			var labelledB = new Labeling(125).Process(filteredB);
+			AddImageToPreview(labelledB, "Labelling B");
+			var labelledC = new Labeling(25).Process(filteredC);
+			AddImageToPreview(labelledC, "Labelling C");
+
+			// Compile Output image from ABC
+			var fullImageProcessor = new MultiProcessor(new Processor[] {
+				new ArithmeticProcessor(Arithmetic.Sum, labelledA), 
+				new ArithmeticProcessor(Arithmetic.Sum, labelledB), 
+			});
+			OutputImage = fullImageProcessor.Process(labelledC);
+			AddImageToPreview(OutputImage, "Combined result");
 
 			_inputBox.Image = InputImage;
 			_outputBox.Image = OutputImage;

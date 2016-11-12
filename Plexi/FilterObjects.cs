@@ -5,20 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Plexi
-{
-    public class FilterObjects : Processor
-    {
+namespace Plexi {
+	public class FilterObjects : Processor {
+		private float _rectangleThreshold;
+		private int _tiniestObjectSize;
+		private int _tolerance;
+
+		/// <param name="rectangleThreshold">Hoe rechthoekig moet het zijn? tussen 0 en 1 waarbij 1 een rechthoek is</param>
+		/// <param name="tiniestObjectSize">tolerantie voor de hoek van de chords</param>
+		/// <param name="tolerance">threshold voor extra filtering te kleine objecten</param>
+		public FilterObjects(float rectangleThreshold = 0.80f, int tiniestObjectSize = 80, int tolerance = 1) {
+			_rectangleThreshold = rectangleThreshold;
+			_tiniestObjectSize = tiniestObjectSize;
+			_tolerance = tolerance;
+		}
+
         public override Matrix Process(Matrix sourceMatrix)
         {
-
-            // Hier kunnen we verder finetunen
-            var rectThreshold = 0.77;       // Hoe rechthoekig moet het sijn? tussen 0 en 1 waarbij 1 een rechthoek is
-            var tolerance = 1;              // tolerantie voor de hoek van de chords
-            var smallObjectSize = 100;      // threshold voor extra filtering te kleine objecten
-
-
-
             var intermediaryMatrix = new Matrix(sourceMatrix.X, sourceMatrix.Y);
             var returnMatrix = sourceMatrix;
             // clone source matrix
@@ -42,7 +45,7 @@ namespace Plexi
                         var color = returnMatrix[imageX, imageY];
                         var objectPixels = ObjectPixels(startPoint, returnMatrix);
 
-                        if (objectPixels.Count > smallObjectSize)
+                        if (objectPixels.Count > _tiniestObjectSize)
                         {
                             var chordList = new List<Chord>();
                             var longestChord = new Chord();
@@ -93,7 +96,7 @@ namespace Plexi
                             foreach (var chord in chordList)
                             {
                                 //Chord zoeken die haaks op de longest chord staat, tolerantie is ingebouwd omdat zeker bij kleine objecten een rechte hoek lastig te vinden is.
-                                if (Math.Abs(Math.Abs(chord.Orientation - longestChord.Orientation) - 90) < tolerance)
+                                if (Math.Abs(Math.Abs(chord.Orientation - longestChord.Orientation) - 90) < _tolerance)
                                 {
                                     if (chord.Length > perpChord.Length)
                                     {
@@ -113,7 +116,7 @@ namespace Plexi
                             }
 
                             //invullen met zwart als het object niet rechthoekig genoeg is
-                            if (rectangularity < rectThreshold)
+                            if (rectangularity < _rectangleThreshold)
                             {
                                 Labeling.FloodFill(new Point(imageX, imageY), color, Color.Black, returnMatrix);
                             }

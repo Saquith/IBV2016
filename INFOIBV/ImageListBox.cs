@@ -23,6 +23,11 @@ namespace INFOIBV {
 				pictureBox8,
 				pictureBox7,
 				pictureBox6,
+				pictureBox15,
+				pictureBox14,
+				pictureBox13,
+				pictureBox12,
+				pictureBox11,
 			};
 			_textBoxes = new[] {
 				label1,
@@ -35,6 +40,11 @@ namespace INFOIBV {
 				label8,
 				label7,
 				label6,
+				label15,
+				label14,
+				label13,
+				label12,
+				label11,
 			};
 			ClearList();
 		}

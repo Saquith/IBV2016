@@ -5,35 +5,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Plexi
-{
+namespace Plexi {
+	public class Labeling : Processor {
+		private int _initialValue;
 
-    public class Labeling : Processor
-    {
-        public override Matrix Process(Matrix sourceMatrix)
-        {
-            var grayCounter = 50;
-            var returnMatrix = sourceMatrix;
+		public Labeling(int initialGrayValue = 35) {
+			_initialValue = initialGrayValue;
+		}
 
-            for (int imageY = 0; imageY < sourceMatrix.Y; imageY++)
-            {
-                for (int imageX = 0; imageX < sourceMatrix.X; imageX++)
-                {
-                    // when we encounter a white pixel, we fill the object with a new grayscale value
-                    if (returnMatrix[imageX,imageY] == Color.FromArgb(255, 255, 255, 255))
-                    {
-                        FloodFill(new Point(imageX,imageY), Color.FromArgb(255, 255, 255, 255), Color.FromArgb(grayCounter, grayCounter, grayCounter), returnMatrix);
-                        if (grayCounter < 255)
-                        {
-                            grayCounter++; // increment the value to assign different labels
-                        }
-                    }
-                }
-            }
-            return returnMatrix;
-        }
+		public override Matrix Process(Matrix sourceMatrix) {
+			var grayCounter = _initialValue;
+			var returnMatrix = sourceMatrix;
 
-        public static void FloodFill(Point point, Color color, Color resultColor, Matrix matrix)
+			for (int imageY = 0; imageY < sourceMatrix.Y; imageY++) {
+				for (int imageX = 0; imageX < sourceMatrix.X; imageX++) {
+					// when we encounter a white pixel, we fill the object with a new grayscale value
+					if (returnMatrix[imageX, imageY] == Color.FromArgb(255, 255, 255, 255)) {
+						FloodFill(new Point(imageX, imageY), Color.FromArgb(255, 255, 255, 255), Color.FromArgb(grayCounter, grayCounter, grayCounter), returnMatrix);
+						if (grayCounter < 255) {
+							grayCounter++; // increment the value to assign different labels
+						}
+					}
+				}
+			}
+			return returnMatrix;
+		}
+
+		public static void FloodFill(Point point, Color color, Color resultColor, Matrix matrix)
         {
             var queue = new List<Point>();
 
