@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
-namespace Plexi
-{
+namespace Plexi {
 	public class ArithmeticProcessor : Processor {
 		private Arithmetic _arithmetic;
 		private Matrix _target;

@@ -69,9 +69,10 @@
 			// 
 			// _inputBox
 			// 
-			this._inputBox.Location = new System.Drawing.Point(32, 41);
+			this._inputBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._inputBox.Location = new System.Drawing.Point(12, 41);
 			this._inputBox.Name = "_inputBox";
-			this._inputBox.Size = new System.Drawing.Size(400, 400);
+			this._inputBox.Size = new System.Drawing.Size(525, 525);
 			this._inputBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this._inputBox.TabIndex = 2;
 			this._inputBox.TabStop = false;
@@ -104,9 +105,10 @@
 			// 
 			// _outputBox
 			// 
-			this._outputBox.Location = new System.Drawing.Point(1372, 41);
+			this._outputBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._outputBox.Location = new System.Drawing.Point(1247, 41);
 			this._outputBox.Name = "_outputBox";
-			this._outputBox.Size = new System.Drawing.Size(400, 400);
+			this._outputBox.Size = new System.Drawing.Size(525, 525);
 			this._outputBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this._outputBox.TabIndex = 5;
 			this._outputBox.TabStop = false;
@@ -114,25 +116,27 @@
 			// 
 			// _currentBox
 			// 
-			this._currentBox.Location = new System.Drawing.Point(679, 40);
+			this._currentBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._currentBox.Location = new System.Drawing.Point(629, 41);
 			this._currentBox.Name = "_currentBox";
-			this._currentBox.Size = new System.Drawing.Size(450, 450);
+			this._currentBox.Size = new System.Drawing.Size(525, 525);
 			this._currentBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this._currentBox.TabIndex = 8;
 			this._currentBox.TabStop = false;
 			// 
 			// _imageListBox
 			// 
-			this._imageListBox.Location = new System.Drawing.Point(37, 494);
+			this._imageListBox.AutoScroll = true;
+			this._imageListBox.Location = new System.Drawing.Point(12, 572);
 			this._imageListBox.Name = "_imageListBox";
-			this._imageListBox.Size = new System.Drawing.Size(1730, 363);
+			this._imageListBox.Size = new System.Drawing.Size(1760, 378);
 			this._imageListBox.TabIndex = 9;
 			// 
 			// INFOIBVForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1784, 861);
+			this.ClientSize = new System.Drawing.Size(1784, 961);
 			this.Controls.Add(this._currentBox);
 			this.Controls.Add(this._imageListBox);
 			this.Controls.Add(this._outputBox);

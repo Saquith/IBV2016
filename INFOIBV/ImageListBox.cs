@@ -18,6 +18,11 @@ namespace INFOIBV {
 				pictureBox3,
 				pictureBox4,
 				pictureBox5,
+				pictureBox10,
+				pictureBox9,
+				pictureBox8,
+				pictureBox7,
+				pictureBox6,
 			};
 			_textBoxes = new[] {
 				label1,
@@ -25,6 +30,11 @@ namespace INFOIBV {
 				label3,
 				label4,
 				label5,
+				label10,
+				label9,
+				label8,
+				label7,
+				label6,
 			};
 			ClearList();
 		}
@@ -52,24 +62,8 @@ namespace INFOIBV {
 		}
 
 		public event EventHandler Clicked;
-
-		private void pictureBox1_Click(object sender, EventArgs e) {
-			Clicked(sender, e);
-		}
-
-		private void pictureBox2_Click(object sender, EventArgs e) {
-			Clicked(sender, e);
-		}
-
-		private void pictureBox3_Click(object sender, EventArgs e) {
-			Clicked(sender, e);
-		}
-
-		private void pictureBox4_Click(object sender, EventArgs e) {
-			Clicked(sender, e);
-		}
-
-		private void pictureBox5_Click(object sender, EventArgs e) {
+		
+		private void Picture_Click(object sender, EventArgs e) {
 			Clicked(sender, e);
 		}
 	}

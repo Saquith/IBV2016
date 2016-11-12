@@ -82,20 +82,32 @@ namespace INFOIBV {
 			AddImageToPreview(fullImage, "Combined thresholded image");
 
 			// Remove edge objects
-			Processor p2 = new MultiProcessor(new Processor[] {
+			Processor edgeRemoveProcessor = new MultiProcessor(new Processor[] {
 				new ReconstructionProcessor(fullImage, new Average3X3(), 0, 204),
 				new ArithmeticProcessor(Arithmetic.Difference, fullImage),
 			});
 
 			var edge = CreateEdgeMatrix(InputImage, 5).ToBitmap();
-			var edgeRemoved = p2.Process(edge);
+			var edgeRemoved = edgeRemoveProcessor.Process(edge);
 			AddImageToPreview(edgeRemoved, "Edge objects removed");
 
-			// Label & create final image
-			Processor p4 = new MultiProcessor(new Processor[] {
-				new DistanceTransformProcessor(),
+			var distanceTransformed = new DistanceTransformProcessor().Process(edgeRemoved);
+			AddImageToPreview(distanceTransformed, "Distance transform");
+
+			// 
+			Processor processor = new MultiProcessor(new Processor[] {
 			});
-			OutputImage = p4.Process(edgeRemoved);
+			var image = processor.Process(distanceTransformed);
+			AddImageToPreview(image, "...");
+
+			// Label
+			Processor labelProcessor = new MultiProcessor(new Processor[] {
+				//new Labeling(),
+			});
+			var labelled = labelProcessor.Process(image);
+			AddImageToPreview(labelled, "Labelling");
+
+			OutputImage = labelled;
 
 			_inputBox.Image = InputImage;
 			_outputBox.Image = OutputImage;
